@@ -77,7 +77,7 @@ console.log(b.name);            // yhshen
 
 ```javascript
 // 一个可行的polyfill
-// 注：不支持传入null
+// 注：不支持传入null且不支持第二个参数
 if (typeof Object.create !== 'function') {
   Object.create = function (proto, propertiesObject) {
     if (typeof proto !== 'object' && typeof proto !== 'function') {
