@@ -1,24 +1,24 @@
-# ¶àÓÃ»§ ssh-key
-
-±êÇ©£¨¿Õ¸ñ·Ö¸ô£©£º ssh
+# å¤šç”¨æˆ· ssh-key
 
 ---
 
-* Éú³ÉÃÜÔ¿¶Ô£º
+* ç”Ÿæˆç§˜é’¥å¯¹
+
 ```shell
 ssh-keygen -t rsa -c "[email_1]" -f ~/.ssh/xxx_rsa
 
 ssh-keygen -t rsa -c "[email_2]" -f ~/.ssh/yyy_rsa
 ```
 
-* Ìí¼ÓconfigÎÄ¼ş
-```
+* æ·»åŠ configæ–‡ä»¶
+
+```shell
 # ssh-key 1
-Host [host]    # ±ğÃû
-HostName [host_name]    # Ö÷»úÃû
-Port [port]    # ¶Ë¿ÚºÅ
-User [user_name]    # ÓÃ»§Ãû
-IdentityFile [rsa_file_path]    # ÃØÔ¿ÎÄ¼şÂ·¾¶
+Host [host]    # åˆ«å
+HostName [host_name]    # ä¸»æœºå
+Port [port]    # ç«¯å£å·
+User [user_name]    # ç”¨æˆ·å
+IdentityFile [rsa_file_path]    # ç§˜é’¥æ–‡ä»¶è·¯å¾„
 
 # ssh-key 2
 Host [host]
@@ -27,32 +27,28 @@ User [user_name]
 IdentityFile [rsa_file_path]
 ```
 
-* ½«ÃØÔ¿Ìí¼Ó½øssh agentÖĞ
+* å°†ç§˜é’¥æ·»åŠ è¿›agentä¸­
+
 ```shell
 # *nix, mac
 ssh-add ~/.ssh/[file_name]
 
 # windows
-# ±ØĞëÔÚgit-bash»òLinux×ÓÏµÍ³ÖĞ½øĞĞ
+# å¿…é¡»åœ¨git-bashæˆ–Linuxå­ç³»ç»Ÿä¸­è¿›è¡Œ
 exec ssh-agent bash
 eval `ssh-agent -s`
 ssh-add ~/.ssh/[file_name]
 ```
 
-* ½«¹«Ô¿Ìí¼Óµ½Ô¶³Ì·şÎñÆ÷ÖĞ
+* å°†å…¬é’¥æ·»åŠ åˆ°è¿œç¨‹æœåŠ¡å™¨ä¸­
 
 * Done
 
-[ssh_config ÎÄµµ](https://linux.die.net/man/5/ssh_config)
+[ssh_config æ–‡æ¡£](https://linux.die.net/man/5/ssh_config)
 
-¶ÔÓÚMacOS£¬¿ÉÒÔÌí¼ÓÁ½¸öÅäÖÃÏî£º
+å¯¹äºMacOSï¼Œå¯ä»¥æ·»åŠ ä¸¤ä¸ªé…ç½®é¡¹
 
-```
+```shell
 UseKeychain yes
 AddKeysToAgent yes
 ```
-
-
-
-
-
