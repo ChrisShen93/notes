@@ -42,4 +42,5 @@
   * [入岗面谈](tips/入岗面谈.md)
   * [瞎写的前端编码规范](tips/瞎写的前端编码规范.md)
 * [Design Pattern](design-pattern.md)
+  * [Observer Pattern](design-pattern/observer-pattern.md)
 
