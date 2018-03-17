@@ -1,3 +1,6 @@
+# Summary
+
+* [Introduction](README.md)
 * [canvas](canvas/canvas.md)
 * [database](database/README.md)
   * [mysql](database/mysql.md)
@@ -38,3 +41,5 @@
 * [tips](tips/README.md)
   * [入岗面谈](tips/入岗面谈.md)
   * [瞎写的前端编码规范](tips/瞎写的前端编码规范.md)
+* [Design Pattern](design-pattern.md)
+
