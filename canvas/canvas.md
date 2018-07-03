@@ -4,6 +4,18 @@ Canvas 是一个利用脚本来动态绘制图片及动画的 HTML 标签。
 
 Canvas 并不被一些老旧的浏览器支持。
 
+## 相关术语
+
+Canvas interface element: 实现了规范定义的绘图方法和属性的元素，即 *canvas* 元素。
+
+Drawing context: 绘图上下文，一个左上角为 (0, 0) 的笛卡尔坐标平面，往右往下x、y分别增加。
+
+Immediate-mode: 立即模式，一种绘图模式。当绘图完成后，所有绘图结构将从内存中立即丢弃。canvas即为此种。
+
+Retained-mode: 残留模式，一种绘图模式。当绘图完成后，所有的绘图结构仍存在于内存中。DOM、SVG即为此种。
+
+Raster: 光栅风格，一种图形风格。由多行断开的图片（行）组成，每行都包含确定的像素个数。
+
 ## 基础用法
 
 ```javascript
@@ -180,5 +192,140 @@ function draw () {
     ctx.stroke(rectangle)
     ctx.fill(circle)
   }
+}
+```
+
+## Canvas 的状态
+
+每个上下文都包含一个绘图状态的堆，绘图状态包括：
+
+* 当前的 transformation matrix
+* 当前的 clipping region
+* 当前的属性值：fillStyle, font, globalAlpha, globalCompositeOperation, lineCap, lineJoin, lineWidth, miterLimit, shadowBlur, shadowColor, shadowOffsetX, shadowOffsetY, strokeStyle, textAlign, textBaseline
+
+> 当前 path 和当前 bitmap 不是绘图状态的一部分。
+> 当前 path 是持久存在的，仅能被 beginPath() 复位
+> 当前 bitmap 是 canvas 的属性，而非绘图上下文
+
+绘图状态是当前画面应用的所有样式和变形的一个快照。状态的应用可以避免绘图代码的过度膨胀。
+
+## APIs
+
+DOM:
+
+```
+interface CanvasElement: Element {
+  attribute unsigned long width;
+  attribute unsigned long height;
+
+  Object getContext(in DOMString contextId);
+  DOMString toDataURL(optional in DOMString type, in any... args);
+};
+```
+
+```
+CanvasRenderingContext2D {
+  // back-reference to the canvas
+  readonly attribute HTMLCanvasElement canvas;
+
+  // state
+  void restore();   // pop state stack and restore state
+  void save();      // push state on state stack
+
+  // transformations
+  // default transform is the identity matrix
+  void rotate(in float angle);
+  void scale(in float x, in float y);
+  void setTransform(in float m11, in float m12, in float m21, in float m22, in float dx, in float dy);
+  void transform(in float m11, in float m12, in float m21, in float m22, in float dx, in float dy);
+  void translate(in float x, in float y);
+
+  // composition
+  attribute float globalAlpha;    // default to 1.0
+  attribute DOMString globalCompositeOperation;   // default to source-over
+
+  // colors and styles
+  attribute any fillStyle;      // default black
+  attribute any strokeStyle;    // default black
+  CanvasGradient createLinearGradient(in float x0, in float y0, in float x1, in float y1);
+  CanvasGradient createRadialGradient(in float x0, in float y0, in float r0, in float x1, in float y1, in float r1);
+  CanvasPattern createPattern(in HTMLCanvasElement image, in DOMString repetition);
+
+  // line styles
+  attribute DOMString lineCap;      // 'butt'(default), 'round', 'square'
+  attribute DOMString lineJoin;     // 'miter'(default), 'round', 'bevel'
+  attribute float lineWidth;        // default 1
+  attribute float miterLimit;       // default 10
+
+  // shadows
+  attribute float shadowBlur;       // default 0
+  attribute DOMString shadowColor;  // default transparent black
+  attribute float shadowOffsetX;    // default 0
+  attribute float shadowOffsetY;    // default 0
+
+  // rects
+  void clearRect(in float x, in float y, in float width, in float height);
+  void fillRect(in float x x, in float y, in float width, in float height);
+  void strokeRect(in float x, in float y, in float width, in float height);
+
+  // Complex shapes (paths) API
+  void arc(in float x, in float y, in float radius, in float startAngle, in float endAngle, in boolean anticlockwise);
+  void arcTo(in float x1, in float y1, in float x2, in float y2, in float radius);
+  void beginPath();
+  void bezierCurveTo(in float cp1x, in float cp1y, in float cp2x, in float cp2y, in float x, in float y);
+  void clip();
+  void closePath();
+  void fill();
+  void lineTo(in float x, in float y);
+  void MoveTo(in float x, in float y);
+  void quadraticCurveTo(in float cpx, in float cpy, in float x, in float y);
+  void rect(in float x, in float y, in float width, in float height);
+  void stroke();
+  boolean isPointInPath(in float x, in float y);
+
+  // text
+  attribute DOMString font;     // default 10px sans-serif
+  attribute DOMString textAlign;    // 'start'(default), 'end', 'left', 'right', 'center'
+  attribute DOMString textBaseline; // 'top'(default), 'handing', 'middle', 'alphabetic', 'ideographic', 'bottom'
+  void fillText(in DOMString text, in float x, in float y, optional in float maxWidth);
+  TextMetrics measureText(in DOMString text);
+  void strokeText(in DOMString text, in float x, in float y, optional in float maxWidth);
+
+  // drawing images
+  void drawImage(in HTMLImageElement image, in float dx, in float dy, optional in float dw, in float dh);
+  viod drawImage(in HTMLImageElement image, in float sx, in float sy, in float sw, in float sh, in float dx, in float dy, in float dw, in float dh);
+
+  // pixel manipulation
+  ImageData createImageData(in float sw, in float sh);
+  ImageData createImageData(in ImageData imagedata);
+  ImageData getImageData(in float sx, in float sy, in float sw, in float sh);
+  void putImageData(in ImageData imagedata, in float dx, in float dy, optional in float dirtyX, in float dirtyY, in float dirtyWidth, in float dirtyHeight);
+};
+```
+
+```
+interface CanvasGradient {
+  // opaque object
+  void addColorStop(in float offset, in DOMString color);
+};
+
+interface CanvasPattern {
+  // opaque object
+};
+
+interface TextMetrics {
+  readonly attribute float width;
+};
+
+interface ImageData {
+  readonly attribute CanvasPixelArray data;
+  readonly attribute unsigned long height;
+  readonly attribute unsigned long width;
+};
+
+interface CanvasPixelArray {
+  readonly attribute unsigned long length;
+  getter octet(in unsigend long index);
+  setter vold(in unsigned long index, in octet value);
 }
 ```
