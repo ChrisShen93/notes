@@ -242,7 +242,7 @@ CanvasRenderingContext2D {
 
   // composition
   attribute float globalAlpha;    // default to 1.0
-  attribute DOMString globalCompositeOperation;   // default to source-over
+  attribute DOMString globalCompositeOperation;   // 设定重叠图像的覆盖方式，source-over(default), destination-over, source-atop, destination-atop, destination-atop, source-in, destination-in, source-out, destination-out, lighter, darker, copy, xor, vendorName-operationName
 
   // colors and styles
   attribute any fillStyle;      // default black
