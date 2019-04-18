@@ -43,4 +43,7 @@
   * [瞎写的前端编码规范](tips/瞎写的前端编码规范.md)
 * [Design Pattern](design-pattern.md)
   * [Observer Pattern](design-pattern/observer-pattern.md)
-
+* [计算机网络](computer-network-and-the-internet/README.md)
+  * [自定向下方法笔记](computer-network-and-the-internet/note.md)
+* [ECMAScript-262](ecma-script-262/README.md)
+  * [严格比较和非严格比较](ecma-script-262/comparison.md)
